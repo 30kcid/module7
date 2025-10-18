@@ -1,50 +1,137 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
-class Program
+namespace SimpleDictionaryApp
 {
-    static void Main(string[] args)
+    class Program
     {
-        Console.WriteLine("Enter the first number:");
-        string input1 = Console.ReadLine();
+        static Dictionary<string, List<string>> myDictionary = new();
 
-        Console.WriteLine("Enter the second number:");
-        string input2 = Console.ReadLine();
+        static void Main()
+        {
+            bool running = true;
 
-        try
-        {
-            int number1 = Convert.ToInt32(input1);
-            int number2 = Convert.ToInt32(input2);
+            while (running)
+            {
+                Console.WriteLine("\n--- Dictionary Menu ---");
+                Console.WriteLine("1. Populate Dictionary");
+                Console.WriteLine("2. Display Dictionary");
+                Console.WriteLine("3. Remove a Key");
+                Console.WriteLine("4. Add New Key and Value");
+                Console.WriteLine("5. Add Value to Existing Key");
+                Console.WriteLine("6. Sort Keys");
+                Console.WriteLine("7. Exit");
+                Console.Write("Select an option: ");
+                string choice = Console.ReadLine();
 
-            int result = Divide(number1, number2);
-            Console.WriteLine($"The result of {number1} divided by {number2} is: {result}");
-        }
-        catch (FormatException ex)
-        {
-            Console.WriteLine("Error: One or both inputs are not valid integers.");
-            Console.WriteLine($"Detailed error: {ex.Message}");
-        }
-        catch (DivideByZeroException ex)
-        {
-            Console.WriteLine("Error: Division by zero is not allowed.");
-            Console.WriteLine($"Detailed error: {ex.Message}");
-        }
-        catch (OverflowException ex)
-        {
-            Console.WriteLine("Error: Number too large or too small for Int32.");
-            Console.WriteLine($"Detailed error: {ex.Message}");
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine("Error: An unexpected error occurred.");
-            Console.WriteLine($"Detailed error: {ex.Message}");
+                switch (choice)
+                {
+                    case "1":
+                        PopulateDictionary();
+                        break;
+                    case "2":
+                        DisplayDictionary();
+                        break;
+                    case "3":
+                        RemoveKey();
+                        break;
+                    case "4":
+                        AddNewKeyAndValue();
+                        break;
+                    case "5":
+                        AddValueToExistingKey();
+                        break;
+                    case "6":
+                        SortKeys();
+                        break;
+                    case "7":
+                        running = false;
+                        Console.WriteLine("Goodbye!");
+                        break;
+                    default:
+                        Console.WriteLine("Invalid choice.");
+                        break;
+                }
+            }
         }
 
-        Console.WriteLine("\nPress any key to exit...");
-        Console.ReadKey();
-    }
+        static void PopulateDictionary()
+        {
+            Console.WriteLine("\nAdd items (leave key empty to stop):");
+            while (true)
+            {
+                Console.Write("Enter key: ");
+                string key = Console.ReadLine();
+                if (string.IsNullOrEmpty(key)) break;
 
-    static int Divide(int a, int b)
-    {
-        return a / b;
+                Console.Write("Enter value: ");
+                string value = Console.ReadLine();
+
+                if (!myDictionary.ContainsKey(key))
+                    myDictionary[key] = new List<string>();
+
+                myDictionary[key].Add(value);
+            }
+        }
+
+        static void DisplayDictionary()
+        {
+            if (myDictionary.Count == 0)
+            {
+                Console.WriteLine("\nDictionary is empty.");
+                return;
+            }
+
+            Console.WriteLine("\n--- Dictionary Contents ---");
+            foreach (var kvp in myDictionary)
+                Console.WriteLine($"{kvp.Key}: {string.Join(", ", kvp.Value)}");
+        }
+
+        static void RemoveKey()
+        {
+            Console.Write("\nEnter key to remove: ");
+            string key = Console.ReadLine();
+
+            if (myDictionary.Remove(key))
+                Console.WriteLine("Key removed.");
+            else
+                Console.WriteLine("Key not found.");
+        }
+
+        static void AddNewKeyAndValue()
+        {
+            Console.Write("\nEnter new key: ");
+            string key = Console.ReadLine();
+            Console.Write("Enter value: ");
+            string value = Console.ReadLine();
+
+            if (!myDictionary.ContainsKey(key))
+                myDictionary[key] = new List<string> { value };
+            else
+                Console.WriteLine("Key already exists.");
+        }
+
+        static void AddValueToExistingKey()
+        {
+            Console.Write("\nEnter key: ");
+            string key = Console.ReadLine();
+            if (!myDictionary.ContainsKey(key))
+            {
+                Console.WriteLine("Key not found.");
+                return;
+            }
+
+            Console.Write("Enter value to add: ");
+            string value = Console.ReadLine();
+            myDictionary[key].Add(value);
+        }
+
+        static void SortKeys()
+        {
+            myDictionary = myDictionary.OrderBy(kvp => kvp.Key)
+                                       .ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
+            Console.WriteLine("\nKeys sorted.");
+        }
     }
 }
