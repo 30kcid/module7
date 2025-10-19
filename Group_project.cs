@@ -11,7 +11,7 @@ namespace SimpleDictionaryApp
         static void Main()
         {
             bool running = true;
-
+//this is is how we made the menu for the dictionary app
             while (running)
             {
                 Console.WriteLine("\n--- Dictionary Menu ---");
@@ -24,7 +24,7 @@ namespace SimpleDictionaryApp
                 Console.WriteLine("7. Exit");
                 Console.Write("Select an option: ");
                 string choice = Console.ReadLine();
-
+//this is how we made the switch statement for the menu options
                 switch (choice)
                 {
                     case "1":
@@ -55,7 +55,7 @@ namespace SimpleDictionaryApp
                 }
             }
         }
-
+//this is how we made command for populating the dictionary
         static void PopulateDictionary()
         {
             Console.WriteLine("\nAdd items (leave key empty to stop):");
@@ -77,7 +77,7 @@ namespace SimpleDictionaryApp
             // Erik Hernandez: added a confirmation so user knows data was added successfully.
             Console.WriteLine("Items added successfully!");
         }
-
+//this is how we made the command for displaying the dictionary
         static void DisplayDictionary()
         {
             if (myDictionary.Count == 0)
@@ -90,7 +90,7 @@ namespace SimpleDictionaryApp
             foreach (var kvp in myDictionary)
                 Console.WriteLine($"{kvp.Key}: {string.Join(", ", kvp.Value)}");
         }
-
+//this is how we made the command for removing a key from the dictionary
         static void RemoveKey()
         {
             Console.Write("\nEnter key to remove: ");
@@ -101,7 +101,7 @@ namespace SimpleDictionaryApp
             else
                 Console.WriteLine("Key not found.");
         }
-
+//this is the command for adding a new key and value to the dictionary
         static void AddNewKeyAndValue()
         {
             Console.Write("\nEnter new key: ");
@@ -114,7 +114,7 @@ namespace SimpleDictionaryApp
             else
                 Console.WriteLine("Key already exists.");
         }
-
+//this is the command for adding a value to an existing key in the dictionary
         static void AddValueToExistingKey()
         {
             Console.Write("\nEnter key: ");
@@ -129,7 +129,7 @@ namespace SimpleDictionaryApp
             string value = Console.ReadLine();
             myDictionary[key].Add(value);
         }
-
+//this is the command for sorting the keys in the dictionary via alphabetical order
         static void SortKeys()
         {
             myDictionary = myDictionary.OrderBy(kvp => kvp.Key)
