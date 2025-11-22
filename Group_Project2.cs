@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic; // Added by Erik Hernandez
 
 namespace ContractorProject
 {
@@ -35,6 +36,22 @@ namespace ContractorProject
             HourlyRate = hourlyRate;
         }
 
+        // Added by Erik Hernandez
+        public string ShiftName
+        {
+            get { return Shift == 1 ? "Day" : "Night"; }
+        }
+
+        // Added by Erik Hernandez
+        public override string ToString()
+        {
+            return $"Name: {Name}\n" +
+                   $"Number: {Number}\n" +
+                   $"Start Date: {StartDate:d}\n" +
+                   $"Shift: {ShiftName}\n" +
+                   $"Hourly Rate: {HourlyRate:C}";
+        }
+
         // Pay method with 3% night shift differential
         public float CalculatePay(double hours)
         {
@@ -53,38 +70,68 @@ namespace ContractorProject
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Enter Contractor Name:");
-            string name = Console.ReadLine();
+            Console.WriteLine("---Contractor Project---\n"); // Added by Erik Hernandez
 
-            Console.WriteLine("Enter Contractor Number:");
-            int number = int.Parse(Console.ReadLine());
+            List<Subcontractor> subcontractors = new List<Subcontractor>(); // Added by Erik Hernandez
+            string again;                                                   // Added by Erik Hernandez
 
-            Console.WriteLine("Enter Start Date (MM/DD/YYYY):");
-            DateTime date = DateTime.Parse(Console.ReadLine());
+            do
+            {
+                Console.WriteLine("Enter Contractor Name:");
+                string name = Console.ReadLine();
 
-            Console.WriteLine("Enter Shift (1 = Day, 2 = Night):");
-            int shift = int.Parse(Console.ReadLine());
+               Console.WriteLine("Enter Contractor Number:");
+int number;  // declare first
 
-            Console.WriteLine("Enter Hourly Rate:");
-            double rate = double.Parse(Console.ReadLine());
+while (!int.TryParse(Console.ReadLine(), out number))  
+{
+    Console.WriteLine("Invalid number. Please enter a whole number:"); // Added by Edwin Alfaro
+}
 
-            Console.WriteLine("Enter Hours Worked:");
-            double hours = double.Parse(Console.ReadLine());
 
-            // Create object
-            Subcontractor s = new Subcontractor(name, number, date, shift, rate);
+                Console.WriteLine("Enter Start Date (MM/DD/YYYY):");
+DateTime date;
 
-            float totalPay = s.CalculatePay(hours);
+while (!DateTime.TryParse(Console.ReadLine(), out date))
+{
+    Console.WriteLine("Invalid date. Enter again (MM/DD/YYYY):");  // Added by Edwin Alfaro
+}
 
-            Console.WriteLine();
-            Console.WriteLine("----- Subcontractor Info -----");
-            Console.WriteLine($"Name: {s.Name}");
-            Console.WriteLine($"Number: {s.Number}");
-            Console.WriteLine($"Start Date: {s.StartDate:d}");
-            Console.WriteLine($"Shift: {(s.Shift == 1 ? "Day" : "Night")}");
-            Console.WriteLine($"Hourly Rate: {s.HourlyRate}");
-            Console.WriteLine($"Total Pay: {totalPay:C}");
+
+                Console.WriteLine("Enter Shift (1 = Day, 2 = Night):");
+int shift;
+while (!int.TryParse(Console.ReadLine(), out shift) || (shift != 1 && shift != 2))
+{
+    Console.WriteLine("Invalid shift. Enter 1 for Day or 2 for Night:");  // Added by Edwin Alfaro
+}
+
+
+                Console.WriteLine("Enter Hourly Rate:");
+                double rate = double.Parse(Console.ReadLine());
+
+                Console.WriteLine("Enter Hours Worked:");
+                double hours = double.Parse(Console.ReadLine());
+
+                // Create object
+                Subcontractor s = new Subcontractor(name, number, date, shift, rate);
+
+                float totalPay = s.CalculatePay(hours);
+
+                subcontractors.Add(s); // Added by Erik Hernandez
+
+                Console.WriteLine();
+                Console.WriteLine("----- Subcontractor Info -----");
+                Console.WriteLine(s.ToString());            // Added by Erik Hernandez
+                Console.WriteLine($"Hours Worked: {hours}");// Added by Erik Hernandez
+                Console.WriteLine($"Total Pay: {totalPay:C}");
+
+                Console.WriteLine("\nDo you want to enter another subcontractor? (y/n)"); // Added by Erik Hernandez
+                again = Console.ReadLine();                                                    // Added by Erik Hernandez
+                Console.WriteLine();
+
+            } while (again.Equals("y", StringComparison.OrdinalIgnoreCase)); // Added by Erik Hernandez
+
+            Console.WriteLine($"Total subcontractors created: {subcontractors.Count}"); // Added by Erik Hernandez
         }
     }
 }
-
